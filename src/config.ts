@@ -6,7 +6,6 @@ export type BatteryConfig = {
   combined_soc_entity?: string;
   flow_entities?: string[];
   invert_flow?: boolean;
-  combined_flow_entity?: string;
   discharge_live_entities?: string[];
   combined_discharge_live_entity?: string;
   charge_live_entities?: string[];
@@ -16,15 +15,18 @@ export type BatteryConfig = {
   parallel_average_voltage?: boolean;
   runtime_location?: string;
   depth_of_discharge?: number;
+  parallel_flow_entity?: string;
+  parallel_soc_entity?: string;
+  show_parallel_soc_entity?: string;
 };
 
 export type ParallelConfig = {
   parallel_first?: boolean;
-  aliases?: boolean;
+  aliases?: string[];
 };
 
 export type RefreshConfig = {
-  lux_dongles?: boolean;
+  lux_dongles?: string[];
   button_location?: string;
 };
 
@@ -39,8 +41,6 @@ export type GridConfig = {
   invert_flow?: boolean;
   voltage_entities?: string[];
   indicators?: GridHueConfig;
-  aliases?: boolean;
-  refresh_button_location?: string;
   generator_power_entities?: string[];
   generator_voltage_entities?: string[];
   parallel_average_voltage?: boolean;
@@ -50,7 +50,7 @@ export type ConsumptionConfig = {
   home_entities: string[];
   combined_consumption_entity?: string;
   backup_entities?: string[];
-  allocated_power_entities?: string[];
+  allocated_power_entity?: string;
 };
 
 export type PvConfig = {
@@ -70,7 +70,6 @@ export type UpdateTimeConfig = {
 
 export type StatusCodesConfig = {
   entities?: string[];
-  include_status_title: false;
   overwrite_as_normal?: number[];
   overwrite_as_warning?: number[];
   overwrite_as_error?: number[];

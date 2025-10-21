@@ -121,6 +121,7 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
       '#home-image',
       '#grid-image',
       '#grid-info',
+      '#power-allocation-image',
     ];
     history_graph.forEach((name) => {
       const element = this.renderRoot.querySelector(name) as HTMLElement;
@@ -214,8 +215,8 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
         break;
       case '#battery-charge-info':
         if (this._index == -1) {
-          if (this._config?.battery.combined_flow_entity) {
-            this._openHistory(this._config.battery.combined_flow_entity);
+          if (this._config?.battery.parallel_flow_entity) {
+            this._openHistory(this._config.battery.parallel_flow_entity);
           }
         } else {
           if (this._config?.battery.flow_entities) {
@@ -230,8 +231,8 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
         break;
       case '#battery-image':
         if (this._index == -1) {
-          if (this._config?.battery.combined_soc_entity) {
-            this._openHistory(this._config.battery.combined_soc_entity);
+          if (this._config?.battery.parallel_soc_entity) {
+            this._openHistory(this._config.battery.parallel_soc_entity);
           }
         } else {
           if (this._config?.battery.soc_entities) {
@@ -272,6 +273,11 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
             grid_list.push(this._config.grid.generator_voltage_entities[this._index]);
           }
           this._openHistoryMulti(grid_list);
+        }
+        break;
+      case '#power-allocation-image':
+        if (this._config?.consumption.allocated_power_entity) {
+          this._openHistory(this._config.consumption.allocated_power_entity);
         }
         break;
       default:
@@ -353,6 +359,14 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
     let arrow_html = ``;
     for (let i = 1; i < 5; i++) {
       arrow_html += `<div class="arrow-${i}"><img src="${getBase64Data(base64Images.Arrow)}"></div>`;
+    }
+    return arrow_html;
+  }
+
+  generateLongArrows() {
+    let arrow_html = ``;
+    for (let i = 1; i < 9; i++) {
+      arrow_html += `<div class="arrow-long-${i}"><img src="${getBase64Data(base64Images.Arrow)}"></div>`;
     }
     return arrow_html;
   }
@@ -636,8 +650,12 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
     let battery_soc = 0;
     if (this._config?.battery.soc_entities) {
       if (index == -1) {
-        battery_soc = this.getEntityParallelStateInt(this._config.battery.soc_entities);
-        return Math.round(battery_soc / this._config.inverter_count);
+        if (this._config?.battery.parallel_soc_entity && this._config?.battery.show_parallel_soc_entity) {
+          battery_soc = this.getEntityStateInt(this._config.battery.parallel_soc_entity);
+        } else {
+          battery_soc = this.getEntityParallelStateInt(this._config.battery.soc_entities);
+          return Math.round(battery_soc / this._config.inverter_count);
+        }
       } else {
         battery_soc = this.getEntityStateInt(this._config.battery.soc_entities[index]);
       }
@@ -709,6 +727,14 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
         ${inv_selector_options}
         </select>
         `;
+      }
+    }
+
+    // ----- Title
+    let title = ``;
+    {
+      if (this._config?.title) {
+        title = `<h1 class="card-header">${this._config.title}</h1>`;
       }
     }
 
@@ -867,6 +893,7 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
           } else {
             const cap_ah = this.getEntityStateInt(this._config.battery.capacity_ah_entities[this._index]);
             total_cap_wh = cap_ah * this.getEntityStateInt(this._config.battery.voltage_entities[this._index]);
+            // Calculate available wh here, soc is different
           }
           const dod = this._config.battery.depth_of_discharge ?? 20;
           if (battery_flow < 0) {
@@ -1029,8 +1056,8 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
     let allocated_arrow = ARROW_NONE;
     let allocated_info = ``;
     {
-      if (this._config?.consumption.allocated_power_entities) {
-        const allocated_power = this.getEntityParallelStateInt(this._config.consumption.allocated_power_entities);
+      if (this._config?.consumption.allocated_power_entity) {
+        const allocated_power = this.getEntityStateInt(this._config.consumption.allocated_power_entity);
         if (allocated_power > 0) {
           allocated_arrow = ARROW_RIGHT;
         }
@@ -1144,7 +1171,7 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
             width: auto;
             padding-left: 15px;
             padding-right: 15px;
-            padding-top: 15px;
+            padding-top: ${this._config.title ? 0 : 15}px;
             padding-bottom: 15px;
           }
 
@@ -1256,6 +1283,18 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
             object-fit: contain;
             position: relative;
           }
+          .arrow-long-cell {
+            margin: auto;
+            display: flex;
+            align-items: center;
+
+            text-align: center;
+            justify-content: center;
+            width: auto;
+            object-fit: contain;
+            position: relative;
+            grid-column: span 2;
+          }
           .arrows-left {
             transform: rotate(0deg);
           }
@@ -1312,6 +1351,61 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
             animation: arrow-flash 1.5s infinite;
           }
 
+          @keyframes arrow-long-flash {
+            0% {
+              opacity: 1;
+            }
+            16% {
+              opacity: 0.65;
+            }
+            32% {
+              opacity: 0.3;
+            }
+            48% {
+              opacity: 0.3;
+            }
+            64% {
+              opacity: 0.3;
+            }
+            80% {
+              opacity: 0.3;
+            }
+            100% {
+              opacity: 1;
+            }
+          }
+          .arrow-long-1 {
+            animation: arrow-long-flash 1.5s infinite;
+            animation-delay: 1.75s;
+          }
+          .arrow-long-2 {
+            animation: arrow-long-flash 1.5s infinite;
+            animation-delay: 1.5s;
+          }
+          .arrow-long-3 {
+            animation: arrow-long-flash 1.5s infinite;
+            animation-delay: 1.25s;
+          }
+          .arrow-long-4 {
+            animation: arrow-long-flash 1.5s infinite;
+            animation-delay: 1s;
+          }
+          .arrow-long-5 {
+            animation: arrow-long-flash 1.5s infinite;
+            animation-delay: 0.75s;
+          }
+          .arrow-long-6 {
+            animation: arrow-long-flash 1.5s infinite;
+            animation-delay: 0.5s;
+          }
+          .arrow-long-7 {
+            animation: arrow-long-flash 1.5s infinite;
+            animation-delay: 0.25s;
+          }
+          .arrow-long-8 {
+            animation: arrow-long-flash 1.5s infinite;
+          }
+
           /* TIME AND DATE */
           .update-time {
             text-align: left;
@@ -1336,6 +1430,7 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
           }
         </style>
         <div>
+          ${unsafeHTML(title)}
           <card-content>
             <div id="taskbar-grid" class="status-grid">
               <div id="select-cell" class="cell">${unsafeHTML(parallel_selector)}</div>
@@ -1381,8 +1476,9 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
                 ${unsafeHTML(this.generateArrows())}
               </div>
               <div id="inverter-image" class="cell image-cell">${inverter_image}</div>
-              <div id="grid-arrows-1" class="cell arrow-cell ${grid_arrow}">${unsafeHTML(this.generateArrows())}</div>
-              <div id="grid-arrows-2" class="cell arrow-cell ${grid_arrow}">${unsafeHTML(this.generateArrows())}</div>
+              <div id="grid-arrows" class="cell arrow-long-cell ${grid_arrow}">
+                ${unsafeHTML(this.generateLongArrows())}
+              </div>
               <div id="grid-image" class="cell image-cell ${grid_image_class}">
                 <img src="${getBase64Data(base64Images.Grid)}" />
               </div>
@@ -1396,7 +1492,7 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
               <div class="cell"></div>
               <div id="grid-info" class="cell text-cell">${unsafeHTML(grid_info)}</div>
 
-              ${this._config?.consumption.allocated_power_entities
+              ${this._config?.consumption.allocated_power_entity
                 ? html`
                     <div class="cell">
                       ${['left', 'both'].includes(refresh_button_location) ? unsafeHTML(refresh_button_left) : html``}
