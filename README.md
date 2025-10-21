@@ -53,6 +53,7 @@ The following is a list of configs for the card:
 | inverter_alias | list of strings | This is used when there is more than 1 inverter. This will be the names used in the dropdown list. This or the lux dongle list is required. |
 | refresh_button | string | The location of the refresh button. Can be 'left', 'right' or 'both'. See below for more information. **NOTE:** the refresh button will only show if the *lux_dongle* is added. |
 | title | string | A title for the card. |
+| temp | entities | An entity that gives the inverters temperature. The unit shown is the unit of the sensor. |
 
 #### Sub-configs that are not a list of entities or values
 
@@ -64,6 +65,7 @@ The following is a list of configs for the card:
 | status_codes | no_grid_is_warning | bool | Some status codes (64, 136 and 192) are shown when grid is not available. If this value is true, these codes will show up as a warning on the status. If the value is false, these values will show up as normal. |
 | parallel | average_voltage | bool | When using multiple inverters, there is a default created item on the list of inverters called "Parallel" that averages all the values from the different inverters. If *average_voltage* is true, the battery and grid voltages will be averaged and shown on the Parallel setting. Otherwise it will not show the voltages there. |
 | parallel | parallel_first | bool | When using multiple inverters, there is a default created item on the list of inverters called "Parallel" that averages all the values from the different inverters. If *parallel_first* is true, the "Parallel" option will be shown first of the list, otherwise it will be last. |
+| grid_flow | reverse | bool | This will multiple the grid fow value by -1 before doing calulations. This is a setting for inverter integrations that are not the LuxPower integration. |
 
 ### Example Configuration
 
@@ -78,6 +80,15 @@ parallel:
 battery_soc:
   entities:
     - sensor.lux_battery
+battery_capacity_ah:
+  entities:
+    - sensor.lux_battery_capacity_ah
+battery_discharge_live:
+  entities:
+    - sensor.lux_battery_discharge_live
+battery_charge_live:
+  entities:
+    - sensor.lux_battery_charge_live
 battery_flow:
   entities:
     - sensor.lux_battery_flow_live
@@ -174,6 +185,86 @@ The status bar for the parallel inverters works as follows:
 - If only one inverter has an non-normal status, the inverter alias will be displayed along with the non-normal status.
 - If all the inverters have the same error (i.e. 'no-grid'), it will display this error on the parallel page.
 - If there are multiple different error, the status will display as 'multiple errors' and you will need to go to the specific inverter to see the error.
+
+ ```yaml
+type: custom:lux-power-distribution-card
+inverter_count: 2
+parallel:
+  average_voltage: true
+  parallel_first: true
+temp:
+  entities:
+    - sensor.lux_6666666666_internal_temperature_live
+    - sensor.lux_8888888888_internal_temperature_live
+battery_soc:
+  entities:
+    - sensor.lux_6666666666_battery
+    - sensor.lux_8888888888_battery
+battery_capacity_ah:
+  entities:
+    - sensor.lux_6666666666_battery_capacity_ah
+    - sensor.lux_8888888888_battery_capacity_ah
+battery_voltage_live:
+  entities:
+    - sensor.lux_6666666666_battery_voltage_live
+    - sensor.lux_8888888888_battery_voltage_live
+battery_discharge_live:
+  entities:
+    - sensor.lux_6666666666_battery_discharge_live
+    - sensor.lux_8888888888_battery_discharge_live
+battery_charge_live:
+  entities:
+    - sensor.lux_6666666666_battery_charge_live
+    - sensor.lux_8888888888_battery_charge_live
+battery_flow:
+  entities:
+    - sensor.lux_6666666666_battery_flow_live
+    - sensor.lux_8888888888_battery_flow_live
+home_consumption:
+  entities:
+    - sensor.lux_6666666666_home_consumption_live
+    - sensor.lux_8888888888_home_consumption_live
+grid_flow:
+  entities:
+    - sensor.lux_6666666666_grid_flow_live
+    - sensor.lux_8888888888_grid_flow_live
+lux_dongle:
+  - XX22222222
+  - XX44444444
+inverter_alias:
+  - Inverter 1
+  - Inverter 2
+battery_voltage:
+  entities:
+    - sensor.lux_6666666666_battery_voltage_live
+    - sensor.lux_8888888888_battery_voltage_live
+pv_power:
+  entities:
+    - sensor.lux_6666666666_solar_output_live
+    - sensor.lux_8888888888_solar_output_live
+backup_power:
+  entities:
+    - sensor.lux_6666666666_power_to_eps_live
+    - sensor.lux_8888888888_power_to_eps_live
+grid_voltage:
+  entities:
+    - sensor.lux_6666666666_grid_voltage_live
+    - sensor.lux_8888888888_grid_voltage_live
+update_time:
+  entities:
+    - sensor.lux_6666666666_data_received_time
+    - sensor.lux_8888888888_data_received_time
+  show_last_update: true
+grid_indicator:
+  hue: true
+status_codes:
+  entities:
+    - sensor.lux_6666666666_status
+    - sensor.lux_8888888888_status
+  no_grid_is_warning: true
+refresh_button: right
+ ```
+
 
 ## Known issues
 
