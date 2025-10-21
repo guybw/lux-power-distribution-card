@@ -1,0 +1,65 @@
+type: custom:lux-power-distribution-card
+inverter_count: 2
+battery:
+  soc_entities:
+    - sensor.lux_12345678_battery
+    - sensor.lux_98765432_battery_2
+  flow_entities:
+    - sensor.lux_12345678_battery_flow_live
+    - sensor.lux_98765432_battery_flow_live_2
+  voltage_entities:
+    - sensor.lux_12345678_battery_voltage_live
+    - sensor.lux_98765432_battery_voltage_live_2
+  parallel_average_voltage: false
+  capacity_ah_entities:
+    - sensor.lux_12345678_battery_capacity_ah
+    - sensor.lux_98765432_battery_capacity_ah_2
+  runtime_location: bottom
+refresh:
+  lux_dongles:
+    - BA12345678
+    - AA98765432
+  button_location: right
+parallel:
+  parallel_first: true
+  aliases:
+    - One
+    - Two
+grid:
+  flow_entities:
+    - sensor.lux_12345678_grid_flow_live
+    - sensor.lux_98765432_grid_flow_live_2
+  voltage_entities:
+    - sensor.lux_12345678_grid_voltage_live
+    - sensor.lux_98765432_grid_voltage_live_2
+  indicators:
+    hue: true
+    dot: false
+  parallel_average_voltage: false
+consumption:
+  home_entities:
+    - sensor.lux_12345678_home_consumption_live
+    - sensor.lux_98765432_home_consumption_live_2
+  backup_entities:
+    - sensor.lux_12345678_power_to_eps_live
+    - sensor.lux_98765432_power_to_eps_live_2
+update_time:
+  entities:
+    - sensor.lux_12345678_data_received_time
+    - sensor.lux_98765432_data_received_time_2
+  show_datetime: false
+  show_time_since: true
+  has_timestamp_attribute: true
+pv:
+  combined_entities:
+    - sensor.lux_12345678_solar_output_live
+    - sensor.lux_98765432_solar_output_live_2
+  combined_parallel_entity: sensor.lux_solar_output_array_2_live
+temp:
+  entities:
+    - sensor.lux_12345678_internal_temperature_live
+    - sensor.lux_98765432_internal_temperature_live_2
+status_codes:
+  entities:
+    - sensor.lux_12345678_status
+    - sensor.lux_98765432_status_2

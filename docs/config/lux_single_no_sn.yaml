@@ -1,0 +1,45 @@
+type: custom:lux-power-distribution-card
+inverter_count: 1
+battery:
+  soc_entities:
+    - sensor.lux_battery
+  flow_entities:
+    - sensor.lux_battery_flow_live
+  voltage_entities:
+    - sensor.lux_battery_voltage_live
+  parallel_average_voltage: false
+  capacity_ah_entities:
+    - sensor.lux_battery_capacity_ah
+  runtime_location: bottom
+refresh:
+  lux_dongles:
+    - BA12345678
+  button_location: right
+grid:
+  flow_entities:
+    - sensor.lux_grid_flow_live
+  voltage_entities:
+    - sensor.lux_grid_voltage_live
+  indicators:
+    hue: true
+    dot: false
+  parallel_average_voltage: false
+consumption:
+  home_entities:
+    - sensor.lux_home_consumption_live
+  backup_entities:
+    - sensor.lux_power_to_eps_live
+update_time:
+  entities:
+    - sensor.lux_data_received_time
+  show_datetime: false
+  show_time_since: true
+  has_timestamp_attribute: true
+pv:
+  combined_parallel_entity: sensor.lux_solar_output_array_2_live
+temp:
+  entities:
+    - sensor.lux_internal_temperature_live
+status_codes:
+  entities:
+    - sensor.lux_status
