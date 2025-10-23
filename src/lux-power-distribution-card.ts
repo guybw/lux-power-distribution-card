@@ -502,7 +502,8 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
   getGridVoltage() {
     if (this._config?.grid.voltage_entities) {
       if (this._index == -1) {
-        return this.getEntityParallelStateInt(this._config.grid.voltage_entities);
+        let grid_v = this.getEntityParallelStateInt(this._config.grid.voltage_entities);
+        return Math.round(grid_v / this._config.inverter_count);
       } else {
         return this.getEntityStateInt(this._config.grid.voltage_entities[this._index]);
       }
