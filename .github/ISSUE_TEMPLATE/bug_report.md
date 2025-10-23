@@ -2,20 +2,24 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---
 
-Before you log a bug, please read through (IN FULL, AND FOLLOW THE INSTRUCTIONS) of the following bug: #61 
+Please fill in the following information:
 
-If you have done that and the problem still persists, please fill in the following report:
+- [ ] I read through the [FAQ's](https://github.com/DanteWinters/lux-power-distribution-card/blob/main/docs/FAQ.md) and my issue isn't described there.
+- [ ] I read through the existing issues (open and closed) and my issue has not been discussed./
+- [ ] The issue started after an update.
+- Last working version: N/A
 
-# Bug report
- - I have looked at issue #61 and followed the steps: Yes/No
- - The last version that worked fine for me was:
- - I'm trying to upgrade to version:
- - I have tested it on the following devices/browsers: Android mobile/ Apple iPhone/ Android tablet/ Apple tablet/ Edge browser/ Firefox browser/ Chrome browser/ Safari browser/ Brave browser (delete those not applicable)
+If the issue started after an update, please indicate the following:
+- **Last version (previous, before the update):** N/A
+- **New version (after the update):** N/A
+
+**I have tested it on the following devices/browsers:** *(delete those not applicable)*
+Android mobile/ Apple iPhone/ Android tablet/ Apple tablet/ Edge browser/ Firefox browser/ Chrome browser/ Safari browser/ Brave browser 
 
 ## Config:
 
