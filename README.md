@@ -1,5 +1,10 @@
 # LuxPower Distribution Card
 
+This is a fork of https://github.com/DanteWinters/lux-power-distribution-card - Please don't use it! This is just to help point people over to Dante.
+
+
+
+
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=flat-square)](https://github.com/hacs/integration)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/DanteWinters/lux-power-distribution-card?style=flat-square)
 ![Github stars](https://img.shields.io/github/stars/DanteWinters/lux-power-distribution-card?style=flat-square)
