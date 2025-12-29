@@ -1,8 +1,3 @@
-# This is forked from: https://github.com/DanteWinters/lux-power-distribution-card
-It's purpose is purely to link back to Dante's card and not to take any credit as he has done an amazing job on this. 
-This is likele out of date!
-
-
 # LuxPower Distribution Card
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=flat-square)](https://github.com/hacs/integration)

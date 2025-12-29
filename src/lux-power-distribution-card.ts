@@ -52,10 +52,10 @@ class LuxPowerDistributionCard extends LitElement implements LovelaceCard {
     if (this._interval) clearInterval(this._interval);
   }
 
-  // public static async getConfigElement(): Promise<LovelaceCardEditor> {
-  //   await import('./editor');
-  //   return document.createElement(EDITOR_NAME) as LovelaceCardEditor;
-  // }
+  public static async getConfigElement(): Promise<LovelaceCardEditor> {
+    await import('./editor');
+    return document.createElement(EDITOR_NAME) as LovelaceCardEditor;
+  }
 
   public static async getStubConfig(): Promise<LuxCardConfig> {
     return {
